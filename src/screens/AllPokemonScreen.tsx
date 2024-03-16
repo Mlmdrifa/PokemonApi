@@ -1,20 +1,21 @@
 import axios from "axios";
 import PokemonPreview from "../component/PokemonPreview";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { ActivityIndicator, Text } from "react-native";
+import { ActivityIndicator, FlatList, Text } from "react-native";
 import CenteredView from "../component/CentredView";
 
 export default function AllPokemonScreen() {
-  const { data, isPending, error } = useInfiniteQuery({
+  const { data, isPending, error, fetchNextPage } = useInfiniteQuery({
     initialPageParam: 1,
     queryKey: ["all prokemons"],
     queryFn: async ({ pageParam = 1 }) => {
+      console.log(pageParam);
       const response = await axios.get(
         `https://pokeapi.co/api/v2/pokemon/${pageParam}`
       );
       return response.data;
     },
-    getNextPageParam: (lastPage) => lastPage,
+    getNextPageParam: (lastPage) => lastPage.id + 1,
   });
   if (isPending)
     return (
@@ -36,9 +37,16 @@ export default function AllPokemonScreen() {
     );
   console.log(JSON.stringify(data.pages[0].name, null, 2));
   return (
-    <PokemonPreview
-      name={data.pages[0].name}
-      uri={data.pages[0].sprites.other.dream_world.front_default}
+    <FlatList
+      onEndReached={fetchNextPage}
+      data={data.pages}
+      renderItem={({ item }) => (
+        <PokemonPreview
+          name={item.name}
+          uri={item.sprites.other.dream_world.front_default}
+        />
+      )}
+      keyExtractor={(item) => item.id}
     />
   );
 }

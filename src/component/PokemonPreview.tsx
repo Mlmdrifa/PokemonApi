@@ -9,7 +9,7 @@ export default function PokemonPreview({ name, uri }: PokemonPreviewProps) {
   return (
     <View style={styles.container}>
       <Text style={styles.name}>{name}</Text>
-      <SvgUri width={width * 0.7} height={width * 0.7} uri={uri} />
+      <SvgUri width={width * 0.3} height={width * 0.3} uri={uri} />
     </View>
   );
 }
