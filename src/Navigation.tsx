@@ -13,7 +13,9 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 export const Navigation = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator
+        screenOptions={{ headerStyle: { backgroundColor: "#EF5350" } }}
+      >
         <Stack.Screen name="AllPokemon" component={AllPokemonScreen} />
         <Stack.Screen name="PokemonDetails" component={PokemonDetailsScreen} />
       </Stack.Navigator>
